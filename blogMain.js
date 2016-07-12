@@ -8,12 +8,13 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity
 } from 'react-native';
 
-import blogPostComponent from './blogPost';
-var REQUEST_URL = 'http://192.168.23.1:8080/chatRoom/blog.do?action=readList&blogAuthor=Johnson';
+import blogPost from './blogPost';
+var REQUEST_URL = 'http://192.168.199.227:8080/chatRoom/blog.do?action=readList&blogAuthor=Johnson';
 
-export default class blogMainComponent extends React.Component {
+export default class blogMain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,28 +23,27 @@ export default class blogMainComponent extends React.Component {
       }),
       loaded: false,
     };
-
-    _pressButton() {
-        const { navigator } = this.props;
-        //为什么这里可以取得 props.navigator?请看上文:
-        //<Component {...route.params} navigator={navigator} />
-        //这里传递了navigator作为props
-        if(navigator) {
-            navigator.push({
-                name: 'blogPostComponent',
-                component: blogPostComponent,
-            })
-        }
-    }
-
-
     // 在ES6中，如果在自定义的函数里使用了this关键字，则需要对其进行“绑定”操作，否则this的指向会变为空
     // 像下面这行代码一样，在constructor中使用bind是其中一种做法（还有一些其他做法，如使用箭头函数等）
     this.fetchData = this.fetchData.bind(this);
+    this._pressButton = this._pressButton.bind(this);
   }
 
   componentDidMount() {
     this.fetchData();
+  }
+
+  _pressButton() {
+      const navigator = this.props.navigator;
+      //为什么这里可以取得 props.navigator?请看上文:
+      //<Component {...route.params} navigator={navigator} />
+      //这里传递了navigator作为props
+      if(navigator) {
+          navigator.push({
+              name: 'blogPost',
+              component: blogPost,
+          })
+      }
   }
 
   fetchData() {
@@ -63,22 +63,20 @@ export default class blogMainComponent extends React.Component {
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
-
     return (
       <ListView
         dataSource={this.state.dataSource}
         renderRow={this.renderBlog}
         style={styles.listView}
       />
-      //跳转页面
-      <View>
-        <TouchableOpacity onPress={this._pressButton.bind(this)}>
-          <Text>点我跳转</Text>
-        </TouchableOpacity>
-      </View>
-
     );
   }
+  // <View>
+  //   <TouchableOpacity onPress={this._pressButton()}>
+  //     <Text>点我跳转</Text>
+  //   </TouchableOpacity>
+  // </View>
+
 
   renderLoadingView() {
     return (

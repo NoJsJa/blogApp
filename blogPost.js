@@ -4,9 +4,9 @@ import {
     Navigator
 } from 'react-native';
 
-import blogMainComponent from './blogMainComponent';
+import blogMain from './blogMain';
 
-export default class blogPostComponent extends React.Component {
+export default class blogPost extends React.Component {
 
     constructor(props) {
         super(props);
@@ -26,8 +26,8 @@ export default class blogPostComponent extends React.Component {
               <View>
                   <TouchableOpacity onPress={this._pressButton.bind(this)}>
                       <Text>点我跳回去</Text>
-                      </TouchableOpacity>
-                      </View>
+                  </TouchableOpacity>
+              </View>
       );
     }
 }
